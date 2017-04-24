@@ -4,5 +4,7 @@ used is incompatible with the lz4 utilities for linux/mac.
 
 This code uses the same library that Spark uses to uncompress such files.
 
+```
    $ sbt clean assembly
    $ java -jar target/scala-2.11/srunlz4-assembly-1.0.jar FILE.lz4
+```

@@ -22,16 +22,18 @@ object Main {
       if (len == blockSize) {
         // full block
         val str = new String(buf, UTF_8)
-        println(str)
+        print(str)
       }
       else {
         // partial block
         if (len == 0) done = true
 
         val str = new String(buf.take(len), UTF_8)
-        println(str)
+        print(str)
       }
     }
+
+    println("")
   }
 
 }

@@ -7,33 +7,26 @@ import net.jpountz.lz4.LZ4BlockInputStream
 
 object Main {
 
-  val blockSize = 23 * 1024
-  val buf = new Array[Byte](blockSize)
+  final val BLOCK_SIZE = 23 * 1024
+
+  val buf = new Array[Byte](BLOCK_SIZE)
 
   def main(av: Array[String]): Unit = {
     val fh = new File(av.headOption.get)
     val is = new FileInputStream(fh)
     val bis = new LZ4BlockInputStream(is)
 
-    var done = false
-    while (!done) {
-      val len = bis.read(buf)
-
-      if (len == blockSize) {
-        // full block
-        val str = new String(buf, UTF_8)
-        print(str)
-      }
-      else {
-        // partial block
-        if (len == 0) done = true
-
-        val str = new String(buf.take(len), UTF_8)
-        print(str)
-      }
+    try {
+      Iterator.continually(bis.read(buf))
+        .takeWhile(_ != 0)
+        .foreach { len =>
+          val str = new String(buf, 0, len, UTF_8)
+          print(str)
+        }
     }
-
-    println("")
+    finally {
+      bis.close()
+    }
   }
 
 }
